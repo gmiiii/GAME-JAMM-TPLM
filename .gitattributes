@@ -1,0 +1,9 @@
+# Normalisasi line ending teks di repo (LF), biarkan working dir mengikuti OS.
+* text=auto
+
+# Aset biner
+*.png binary
+*.jpg binary
+*.ogg binary
+*.wav binary
+*.ttf binary
