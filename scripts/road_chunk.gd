@@ -12,24 +12,25 @@ func build() -> void:
 	var sh_w := GameConfig.LANE_W
 	var grass_w := 24.0
 	var l := GameConfig.CHUNK_LEN
+	var lz := l + 0.15            # sedikit lebih panjang -> overlap, tak ada celah di sambungan
 
 	# Aspal
-	var road := Build3D.box(Vector3(road_w, 0.1, l), GameConfig.COL_ROAD)
+	var road := Build3D.box(Vector3(road_w, 0.1, lz), GameConfig.COL_ROAD)
 	add_child(road)
 
 	# Bahu kiri & kanan (tempat ayam spawn)
-	var ls := Build3D.box(Vector3(sh_w, 0.12, l), GameConfig.COL_SHOULDER)
+	var ls := Build3D.box(Vector3(sh_w, 0.12, lz), GameConfig.COL_SHOULDER)
 	ls.position = Vector3(-(road_w * 0.5 + sh_w * 0.5), 0, 0)
 	add_child(ls)
-	var rs := Build3D.box(Vector3(sh_w, 0.12, l), GameConfig.COL_SHOULDER)
+	var rs := Build3D.box(Vector3(sh_w, 0.12, lz), GameConfig.COL_SHOULDER)
 	rs.position = Vector3(road_w * 0.5 + sh_w * 0.5, 0, 0)
 	add_child(rs)
 
 	# Rumput di luar bahu
-	var lg := Build3D.box(Vector3(grass_w, 0.08, l), GameConfig.COL_GRASS)
+	var lg := Build3D.box(Vector3(grass_w, 0.08, lz), GameConfig.COL_GRASS)
 	lg.position = Vector3(-(road_w * 0.5 + sh_w + grass_w * 0.5), -0.02, 0)
 	add_child(lg)
-	var rg := Build3D.box(Vector3(grass_w, 0.08, l), GameConfig.COL_GRASS)
+	var rg := Build3D.box(Vector3(grass_w, 0.08, lz), GameConfig.COL_GRASS)
 	rg.position = Vector3(road_w * 0.5 + sh_w + grass_w * 0.5, -0.02, 0)
 	add_child(rg)
 

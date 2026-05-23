@@ -26,9 +26,12 @@ func _process(delta: float) -> void:
 	if GameState.is_game_over:
 		return
 	var move := GameState.scroll_speed * delta
-	var behind_limit := GameConfig.CHUNK_LEN * GameConfig.CHUNK_BEHIND
+	# Pass 1: geser semua chunk dulu (posisi konsisten).
 	for c in _chunks:
 		c.position.z += move
+	# Pass 2: recycle chunk yang lewat batas belakang ke paling depan.
+	var behind_limit := GameConfig.CHUNK_LEN * GameConfig.CHUNK_BEHIND
+	for c in _chunks:
 		if c.position.z > behind_limit:
 			c.position.z = _front_z() - GameConfig.CHUNK_LEN
 
