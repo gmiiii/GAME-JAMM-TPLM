@@ -1,18 +1,22 @@
 # GAME-JAMM-TPLM
 
-Game arcade satu layar (orientasi landscape) dibuat dengan **Godot 4.6**.
+Game *endless driver* **3D** dibuat dengan **Godot 4.6**.
 
-Kamu mengendalikan sebuah mobil yang menyeberangi jalan raya penuh lalu lintas.
-Seekor ayam penipu mengejar mobilmu, berusaha sengaja tertabrak agar bisa menuntutmu
-ke pengadilan dengan rekaman dashcam. Tidak ada kondisi menang — bertahanlah selama
-mungkin. Satu tabrakan (dengan ayam atau kendaraan lain) langsung mengakhiri permainan.
+Kamu mengendarai mobil di jalan raya tanpa henti. Ayam penipu bermunculan dari bahu jalan
+dan sengaja menabrakkan diri ke mobilmu agar bisa menuntut lewat rekaman dashcam. Hindari
+ayam **dan** lalu lintas dari dua arah. Tidak ada kondisi menang — bertahan & kumpulkan jarak
+sejauh mungkin. Menabrak ayam atau mobil lain langsung mengakhiri permainan.
 
 ## Kontrol
 
 | Aksi | Tombol |
 |------|--------|
-| Gerak per-blok (4 arah) | Panah / `W` `A` `S` `D` |
+| Gas (maju lebih cepat) | `W` / `↑` |
+| Rem (melambat) | `S` / `↓` |
+| Pindah lane kiri/kanan | `A` `D` / `←` `→` |
 | Main lagi setelah kalah | `R` / `Enter` / `Spasi` |
+
+Mobil selalu bergerak maju; gas/rem hanya mengatur kecepatan.
 
 ## Cara menjalankan
 
@@ -24,14 +28,15 @@ mungkin. Satu tabrakan (dengan ayam atau kendaraan lain) langsung mengakhiri per
 
 ```
 autoload/   konstanta & state global (GameConfig, GameState)
-scripts/    logika gameplay (pemain, ayam, bot car, dll)
+scripts/    logika gameplay (pemain, ayam, traffic, treadmill jalan, dll)
 scenes/     scene Godot
-assets/     aset sprite & audio (placeholder)
+assets/     model 3D & audio (lihat assets/README.md)
 ```
 
 ## Status
 
-Prototipe **playable** dengan art placeholder. Mekanik inti sudah jalan:
-gerak pemain grid-stepped, ayam pengejar otomatis, lalu lintas bot car dua arah,
-deteksi tabrakan, respawn saat menyeberang, dan layar game over. Aset & polish
-final menyusul.
+Prototipe **playable** memakai placeholder 3D (kotak berwarna). Mekanik inti sudah jalan:
+mobil maju dengan gas/rem + hop antar-lane, jalan endless ber-treadmill, lalu lintas dua arah
+(searah & berlawanan), ayam yang mengejar sambil menghindari mobil dan bisa tertabrak lalu
+respawn, eskalasi kesulitan mengikuti jarak, deteksi tabrakan, dan layar game over. Model FBX
+& audio final menyusul.
