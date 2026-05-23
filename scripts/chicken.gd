@@ -6,6 +6,7 @@ extends Area3D
 
 const BODY := Vector3(0.8, 0.8, 0.9)
 const DIRS := [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]
+const ChickenModel := preload("res://assets/models/chicken/chicken.FBX")
 
 var _player: Node3D
 var speed: float = 11.0
@@ -24,17 +25,12 @@ func _ready() -> void:
 
 
 func _build() -> void:
-	add_child(Build3D.box(BODY, GameConfig.COL_CHICKEN))
-	var comb := Build3D.box(Vector3(0.25, 0.3, 0.25), GameConfig.COL_COMB)
-	comb.position = Vector3(0, 0.5, 0.2)
-	add_child(comb)
-	var beak := Build3D.box(Vector3(0.2, 0.2, 0.3), GameConfig.COL_BEAK)
-	beak.position = Vector3(0, 0.1, 0.55)
-	add_child(beak)
+	add_child(Build3D.model(ChickenModel, BODY.z, GameConfig.MODEL_YAW_CHICKEN))
 	var cs := CollisionShape3D.new()
 	var shape := BoxShape3D.new()
 	shape.size = BODY
 	cs.shape = shape
+	cs.position.y = BODY.y * 0.5
 	add_child(cs)
 
 

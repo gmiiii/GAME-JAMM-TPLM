@@ -85,6 +85,10 @@ const COL_COMB := Color("d23b3b")
 const COL_BEAK := Color("e8a020")
 const COL_SKY := Color("8fd0ff")
 
+# --- Koreksi arah hadap model FBX (derajat, sesuaikan bila model menghadap salah) ---
+const MODEL_YAW_CAR: float = 180.0
+const MODEL_YAW_CHICKEN: float = 180.0
+
 # --- Kamera (gaya Crossy Road: ortografik, sudut tinggi & statis) ---
 const CAM_ORTHOGRAPHIC: bool = true
 const CAM_POSITION := Vector3(-16, 28, 16)   # belakang-kiri-atas

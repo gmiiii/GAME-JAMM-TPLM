@@ -62,7 +62,7 @@ func _pick_position() -> Vector3:
 			_:  # belakang pemain
 				x = GridUtils.col_x(randi_range(GameConfig.LEFT_SHOULDER, GameConfig.RIGHT_SHOULDER))
 				z = randf_range(GameConfig.CHICKEN_BEHIND_Z_MIN, GameConfig.CHICKEN_BEHIND_Z_MAX)
-		var p := Vector3(x, 0.4, z)
+		var p := Vector3(x, 0.0, z)
 		if _is_clear(p):
 			return p
 	return Vector3.INF

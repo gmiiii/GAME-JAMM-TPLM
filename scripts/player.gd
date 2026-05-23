@@ -4,6 +4,7 @@ extends Area3D
 # kecepatan scroll, geser kiri-kanan = hop antar-lane diskrit (visual halus).
 
 const BODY := Vector3(2.0, 1.2, 4.0)
+const CarModel := preload("res://assets/models/vehicles/Car.FBX")
 
 var current_col: int = GameConfig.PLAYER_START_COL
 var speed: float = 0.0
@@ -15,19 +16,17 @@ func _ready() -> void:
 	collision_mask = 2 | 4          # deteksi traffic (2) & ayam (4)
 	_build()
 	speed = GameConfig.CRUISE_SPEED
-	position = Vector3(GridUtils.col_x(current_col), BODY.y * 0.5, GameConfig.PLAYER_Z)
+	position = Vector3(GridUtils.col_x(current_col), 0.0, GameConfig.PLAYER_Z)
 	area_entered.connect(_on_area_entered)
 
 
 func _build() -> void:
-	add_child(Build3D.box(BODY, GameConfig.COL_PLAYER))
-	var cabin := Build3D.box(Vector3(1.6, 0.8, 1.8), GameConfig.COL_PLAYER.darkened(0.25))
-	cabin.position = Vector3(0, 0.9, -0.3)
-	add_child(cabin)
+	add_child(Build3D.model(CarModel, BODY.z, GameConfig.MODEL_YAW_CAR))
 	var cs := CollisionShape3D.new()
 	var shape := BoxShape3D.new()
 	shape.size = BODY
 	cs.shape = shape
+	cs.position.y = BODY.y * 0.5
 	add_child(cs)
 
 
