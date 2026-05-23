@@ -41,6 +41,28 @@ func _process(delta: float) -> void:
 	if GameState.is_game_over:
 		return
 	var net := GameState.scroll_speed + (own_speed if oncoming else -own_speed)
-	position.z += net * delta
+	var dz := net * delta
+	# Car-following: jangan menembus mobil di depan (selajur). Antre jaga jarak.
+	var leader := _leader_ahead()
+	if leader != null:
+		var gap: float = leader.position.z - position.z - (length + leader.length) * 0.5
+		dz = clampf(dz, 0.0, maxf(0.0, gap - GameConfig.TRAFFIC_MIN_GAP))
+	position.z += dz
 	if position.z > GameConfig.TRAFFIC_DESPAWN_Z:
 		queue_free()
+
+
+# Mobil terdekat di depan (+Z) pada lane yang sama.
+func _leader_ahead() -> Node3D:
+	var best: Node3D = null
+	var best_dz := INF
+	for c in get_tree().get_nodes_in_group("traffic"):
+		if c == self:
+			continue
+		if absf(c.position.x - position.x) > GameConfig.LANE_W * 0.5:
+			continue
+		var d: float = c.position.z - position.z
+		if d > 0.0 and d < best_dz:
+			best_dz = d
+			best = c
+	return best
