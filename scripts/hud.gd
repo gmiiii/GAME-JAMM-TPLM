@@ -1,65 +1,46 @@
 extends CanvasLayer
-## HUD: skor berjalan + panel game over. Node UI dibuat via kode (placeholder).
+
+# Skor + panel game over (pesan beda untuk ayam vs mobil).
 
 var _score_label: Label
-var _gameover_panel: Control
-var _final_label: Label
+var _panel: ColorRect
+var _panel_label: Label
 
 
 func _ready() -> void:
 	_score_label = Label.new()
-	_score_label.position = Vector2(10, 6)
-	_score_label.add_theme_font_size_override("font_size", 16)
+	_score_label.position = Vector2(18, 14)
+	_score_label.add_theme_font_size_override("font_size", 22)
 	add_child(_score_label)
-
-	_gameover_panel = _build_gameover_panel()
-	_gameover_panel.visible = false
-	add_child(_gameover_panel)
-
-	GameState.score_changed.connect(_update_score)
+	_build_panel()
 	GameState.game_over_changed.connect(_on_game_over)
-	_update_score()
 
 
-func _build_gameover_panel() -> Control:
-	var root := ColorRect.new()
-	root.color = Color(0, 0, 0, 0.55)
-	root.set_anchors_preset(Control.PRESET_FULL_RECT)
-	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
-
-	var box := VBoxContainer.new()
-	box.set_anchors_preset(Control.PRESET_CENTER)
-	box.alignment = BoxContainer.ALIGNMENT_CENTER
-	box.add_theme_constant_override("separation", 8)
-	root.add_child(box)
-
-	var title := Label.new()
-	title.text = "GAME OVER"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 40)
-	box.add_child(title)
-
-	_final_label = Label.new()
-	_final_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_final_label.add_theme_font_size_override("font_size", 18)
-	box.add_child(_final_label)
-
-	var hint := Label.new()
-	hint.text = "Tekan R / Enter / Spasi untuk main lagi"
-	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hint.add_theme_font_size_override("font_size", 16)
-	box.add_child(hint)
-
-	return root
+func _process(_delta: float) -> void:
+	if not GameState.is_game_over:
+		_score_label.text = "Jarak: %d m\nSkor: %d\nTerbaik: %d" % [
+			int(GameState.distance), GameState.score(), GameState.high_score]
 
 
-func _update_score() -> void:
-	_score_label.text = "Skor: %d   Menyeberang: %d   Waktu: %ds   Terbaik: %d" % [
-		GameState.score(), GameState.crossings, int(GameState.time_survived), GameState.high_score,
-	]
+func _build_panel() -> void:
+	_panel = ColorRect.new()
+	_panel.color = Color(0, 0, 0, 0.6)
+	_panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_panel.visible = false
+	add_child(_panel)
+	_panel_label = Label.new()
+	_panel_label.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_panel_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_panel_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_panel_label.add_theme_font_size_override("font_size", 30)
+	_panel.add_child(_panel_label)
 
 
 func _on_game_over(is_over: bool) -> void:
-	if is_over:
-		_final_label.text = "Skor akhir: %d    Terbaik: %d" % [GameState.score(), GameState.high_score]
-		_gameover_panel.visible = true
+	if not is_over:
+		return
+	var head := "LAWSUIT!\nKamu menabrak ayam." if GameState.death_cause == "chicken" \
+		else "CRASH!\nKamu menabrak mobil lain."
+	_panel_label.text = "%s\n\nSkor: %d   Terbaik: %d\n\nTekan R untuk main lagi" % [
+		head, GameState.score(), GameState.high_score]
+	_panel.visible = true
