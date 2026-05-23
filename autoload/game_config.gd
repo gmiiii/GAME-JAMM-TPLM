@@ -57,7 +57,7 @@ const CHICKEN_SPAWN_MIN: float = 2.0
 const CHICKEN_SPAWN_MAX: float = 4.0
 const CHICKEN_MAX_ALIVE: int = 3
 const CHICKEN_RESPAWN_DELAY: float = 1.5
-const CHICKEN_TICK: float = 0.25           # interval re-plan pathfinding (A*)
+const CHICKEN_TICK: float = 0.8            # cadence langkah / re-plan A* (detik; makin besar = ayam makin lambat)
 const CHICKEN_RANDOM_CHANCE: float = 0.18  # peluang langkah acak/nekat (abaikan bahaya -> bisa ketabrak)
 const CHICKEN_DANGER_Z: float = 3.5        # margin bahaya di sekitar mobil (untuk blokir sel)
 const CHICKEN_DESPAWN_Z: float = 24.0      # tertinggal di belakang -> hilang
@@ -110,6 +110,7 @@ func _register_input() -> void:
 	_add_action("lane_left", [KEY_A, KEY_LEFT])
 	_add_action("lane_right", [KEY_D, KEY_RIGHT])
 	_add_action("restart", [KEY_R, KEY_ENTER, KEY_SPACE])
+	_add_action("pause", [KEY_ESCAPE])
 
 
 func _add_action(action: String, keys: Array) -> void:

@@ -39,7 +39,13 @@ func set_player(p: Node3D) -> void:
 
 
 func _process(delta: float) -> void:
-	if GameState.is_game_over or _dead or _player == null:
+	if GameState.is_game_over or _player == null:
+		return
+
+	# Sudah mati (gepeng): berhenti mengejar, tapi TETAP ikut treadmill agar
+	# hanyut mundur bersama jalan seperti objek lain, bukan diam di tempat.
+	if _dead:
+		global_position.z += GameState.scroll_speed * delta
 		return
 
 	speed = min(GameConfig.CHICKEN_SPEED_MAX,
