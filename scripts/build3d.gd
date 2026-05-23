@@ -19,6 +19,7 @@ static func box(size: Vector3, color: Color) -> MeshInstance3D:
 # alas di y=0 & terpusat pada x/z. yaw_deg memutar model (untuk koreksi arah hadap).
 static func model(scene: PackedScene, target_footprint: float, yaw_deg: float = 0.0) -> Node3D:
 	var inst: Node3D = scene.instantiate()
+	_hide_collision_meshes(inst)
 	var aabb := _local_aabb(inst)
 	var fp: float = maxf(aabb.size.x, aabb.size.z)
 	var s: float = target_footprint / fp if fp > 0.0001 else 1.0
@@ -31,10 +32,20 @@ static func model(scene: PackedScene, target_footprint: float, yaw_deg: float = 
 	return holder
 
 
+# Sembunyikan mesh collision proxy bawaan FBX (prefix "UCX_") agar tidak terender.
+static func _hide_collision_meshes(root: Node3D) -> void:
+	for mi in root.find_children("*", "MeshInstance3D", true, false):
+		var n := String(mi.name).to_upper()
+		if n.begins_with("UCX") or n.contains("COLLISION"):
+			mi.visible = false
+
+
 static func _local_aabb(root: Node3D) -> AABB:
 	var result := AABB()
 	var first := true
 	for vi in root.find_children("*", "VisualInstance3D", true, false):
+		if vi is GeometryInstance3D and not (vi as GeometryInstance3D).visible:
+			continue
 		var a: AABB = vi.get_aabb()
 		var rel := _rel_xform(root, vi)
 		for i in range(8):
