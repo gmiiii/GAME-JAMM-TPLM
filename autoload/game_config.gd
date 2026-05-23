@@ -40,6 +40,8 @@ const TRAFFIC_SPAWN_Z: float = -90.0
 const TRAFFIC_DESPAWN_Z: float = 22.0
 const TRAFFIC_OWN_SPEED_MIN: float = 4.0
 const TRAFFIC_OWN_SPEED_MAX: float = 8.0
+const TRAFFIC_MIN_GAP: float = 1.6         # jarak antre minimum antar mobil selajur
+const TRAFFIC_SPAWN_CLEAR: float = 12.0    # zona bebas di titik spawn agar tak bertumpuk
 const CARS := {
 	"family":  {"size": Vector3(2.2, 1.4, 4.4), "color": Color("e8e8e8")},
 	"formula": {"size": Vector3(2.0, 1.0, 5.0), "color": Color("d23b3b")},
@@ -60,19 +62,20 @@ const CHICKEN_RANDOM_CHANCE: float = 0.18  # peluang langkah acak/nekat (abaikan
 const CHICKEN_DANGER_Z: float = 3.5        # margin bahaya di sekitar mobil (untuk blokir sel)
 const CHICKEN_DESPAWN_Z: float = 24.0      # tertinggal di belakang -> hilang
 const CHICKEN_CELL_Z: float = 3.0          # ukuran sel grid arah Z
-# Posisi spawn acak: samping (bahu), depan (jauh, dlm area render), belakang pemain
-const CHICKEN_FRONT_Z_MIN: float = -75.0   # depan terjauh (masih ter-render)
-const CHICKEN_FRONT_Z_MAX: float = -38.0
-const CHICKEN_BEHIND_Z_MIN: float = 6.0
-const CHICKEN_BEHIND_Z_MAX: float = 14.0
-const CHICKEN_SIDE_Z_MIN: float = -12.0
-const CHICKEN_SIDE_Z_MAX: float = 2.0
-const CHICKEN_SPAWN_CLEAR: float = 3.0     # radius wajib bebas mobil saat spawn
+# Spawn HANYA di bahu rumput samping, di DEPAN pemain (boleh area belum ter-render).
+# Tidak pernah di belakang pemain, tidak pernah di tengah jalan.
+const CHICKEN_SPAWN_Z_NEAR: float = -3.0   # paling dekat (tetap di depan pemain)
+const CHICKEN_SPAWN_Z_FAR: float = -85.0   # paling jauh di depan (boleh belum ter-render)
 
 # --- Eskalasi kesulitan ---
-const ESCALATE_EVERY: float = 200.0    # tiap N meter, kesulitan naik 1 langkah
-const SCROLL_BONUS_PER_STEP: float = 1.5
-const CHICKEN_SPEED_BONUS_PER_STEP: float = 0.6
+const ESCALATE_EVERY: float = 150.0    # tiap N meter, kesulitan naik 1 langkah
+const SCROLL_BONUS_PER_STEP: float = 1.6
+const CHICKEN_SPEED_BONUS_PER_STEP: float = 0.7
+# Spawn makin rapat seiring kesulitan
+const DIFFICULTY_SPAWN_FACTOR: float = 0.05  # pengurangan interval spawn per step
+const DIFFICULTY_SPAWN_FLOOR: float = 0.4    # batas bawah pengali interval
+const CHICKEN_EXTRA_PER_STEPS: int = 3       # +1 ayam maksimum tiap N step
+const CHICKEN_MAX_ALIVE_CAP: int = 8         # batas atas ayam hidup bersamaan
 
 # --- Warna placeholder ---
 const COL_GRASS := Color("4a8a3a")

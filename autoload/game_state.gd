@@ -42,3 +42,9 @@ func trigger_game_over(cause: String) -> void:
 
 func score() -> int:
 	return int(distance) + int(time_survived) * 2
+
+
+# Pengali interval spawn: makin tinggi kesulitan, makin kecil (spawn makin rapat).
+func spawn_interval_mult() -> float:
+	return maxf(GameConfig.DIFFICULTY_SPAWN_FLOOR,
+		1.0 - escalation_step * GameConfig.DIFFICULTY_SPAWN_FACTOR)
