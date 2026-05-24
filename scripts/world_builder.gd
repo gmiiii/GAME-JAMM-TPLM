@@ -32,6 +32,8 @@ static func setup_camera(parent: Node) -> void:
 	else:
 		cam.fov = GameConfig.CAM_FOV
 	cam.position = GameConfig.CAM_POSITION
+	cam.set_script(load("res://scripts/camera_shake.gd"))   # method shake() untuk crash
+	cam.add_to_group("camera")
 	parent.add_child(cam)
 	cam.look_at(GameConfig.CAM_LOOK_AT, Vector3.UP)
 	cam.current = true

@@ -10,6 +10,7 @@ const TruckModel := preload("res://assets/models/vehicles/Truck.FBX")
 var own_speed: float = 6.0
 var oncoming: bool = false
 var length: float = 4.0                 # panjang (Z), dipakai logika ayam
+var _whooshed: bool = false             # whoosh hanya sekali, saat melewati pemain
 
 
 func setup(type_key: String, lane_col: int) -> void:
@@ -48,8 +49,22 @@ func _process(delta: float) -> void:
 		var gap: float = leader.position.z - position.z - (length + leader.length) * 0.5
 		dz = clampf(dz, 0.0, maxf(0.0, gap - GameConfig.TRAFFIC_MIN_GAP))
 	position.z += dz
+	_try_whoosh()
 	if position.z > GameConfig.TRAFFIC_DESPAWN_Z:
 		queue_free()
+
+
+# Bunyi "whoosh" sekali saat mobil melintas dekat pemain (hanya lane sekitar
+# pemain agar tidak terlalu ramai).
+func _try_whoosh() -> void:
+	if _whooshed or position.z < -2.0:
+		return
+	_whooshed = true
+	var player := get_tree().get_first_node_in_group("player")
+	if player == null:
+		return
+	if absf(global_position.x - player.global_position.x) <= GameConfig.LANE_W * 2.0:
+		Audio.play_sfx(Audio.SFX_WHOOSH, randf_range(0.95, 1.1), -10.0)
 
 
 # Mobil terdekat di depan (+Z) pada lane yang sama.

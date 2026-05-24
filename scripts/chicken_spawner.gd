@@ -53,3 +53,4 @@ func _spawn() -> void:
 	var z := randf_range(GameConfig.CHICKEN_SPAWN_Z_FAR, GameConfig.CHICKEN_SPAWN_Z_NEAR)
 	ch.position = Vector3(GridUtils.col_x(shoulder), 0.0, z)
 	add_child(ch)
+	Audio.play_sfx(Audio.SFX_CHICKEN_SPAWN, randf_range(0.95, 1.1), -4.0)

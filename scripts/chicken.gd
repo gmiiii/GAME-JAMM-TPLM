@@ -13,6 +13,7 @@ var speed: float = 11.0
 var _tick: float = 0.0
 var _next_cell: Vector2i
 var _dead: bool = false
+var _cluck_t: float = 0.0
 
 
 func _ready() -> void:
@@ -21,6 +22,7 @@ func _ready() -> void:
 	collision_mask = 2                  # deteksi traffic
 	_build()
 	_next_cell = _cell()
+	_cluck_t = randf_range(1.0, 3.0)
 	area_entered.connect(_on_area_entered)
 
 
@@ -47,6 +49,13 @@ func _process(delta: float) -> void:
 	if _dead:
 		global_position.z += GameState.scroll_speed * delta
 		return
+
+	# Kokok berkala saat mengejar (volume pelan, pitch sedikit acak).
+	_cluck_t -= delta
+	if _cluck_t <= 0.0:
+		_cluck_t = randf_range(1.2, 3.0)
+		Audio.play_sfx(Audio.SFX_CLUCK[randi() % Audio.SFX_CLUCK.size()],
+			randf_range(0.9, 1.15), -6.0)
 
 	speed = min(GameConfig.CHICKEN_SPEED_MAX,
 		GameConfig.CHICKEN_SPEED_START + GameState.escalation_step * GameConfig.CHICKEN_SPEED_BONUS_PER_STEP)
@@ -207,6 +216,12 @@ func _die() -> void:
 	add_to_group("dead_chicken")
 	collision_layer = 0
 	set_deferred("monitorable", false)
-	scale = Vector3(1.3, 0.15, 1.3)     # gepeng
+	Audio.play_sfx(Audio.SFX_HURT[randi() % Audio.SFX_HURT.size()], randf_range(0.95, 1.1))
+	# Pop kecil sebelum gepeng (squash & stretch).
+	var tw := create_tween()
+	tw.tween_property(self, "scale", Vector3(1.6, 1.6, 1.6), 0.06) \
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(self, "scale", Vector3(1.4, 0.12, 1.4), 0.12) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	await get_tree().create_timer(GameConfig.CHICKEN_RESPAWN_DELAY).timeout
 	queue_free()

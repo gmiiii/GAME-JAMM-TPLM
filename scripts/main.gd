@@ -24,6 +24,7 @@ func _ready() -> void:
 	_setup_spawners()
 	add_child(HudScene.instantiate())
 	add_child(PauseMenu.new())
+	Audio.play_music(Audio.MUSIC_INGAME)
 
 
 func _setup_environment() -> void:
