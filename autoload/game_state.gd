@@ -4,6 +4,7 @@ extends Node
 
 signal game_over_changed(is_over: bool)
 signal score_changed
+signal escalation_changed(step: int)
 
 var scroll_speed: float = 0.0          # kecepatan dunia bergerak ke pemain (di-set player)
 var distance: float = 0.0              # total jarak tempuh (meter)
@@ -25,7 +26,10 @@ func reset() -> void:
 
 func add_distance(d: float) -> void:
 	distance += d
-	escalation_step = int(distance / GameConfig.ESCALATE_EVERY)
+	var new_step := int(distance / GameConfig.ESCALATE_EVERY)
+	if new_step != escalation_step:
+		escalation_step = new_step
+		escalation_changed.emit(escalation_step)
 	score_changed.emit()
 
 
