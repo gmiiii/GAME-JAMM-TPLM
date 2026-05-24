@@ -10,11 +10,11 @@ config_version=5
 
 [application]
 
-config/name="GAME-JAMM-TPLM"
+config/name="Cashy Road"
 config/description="Endless driver 3D: kendarai mobil di jalan raya tanpa henti sambil menghindari ayam penipu."
 run/main_scene="res://scenes/title.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://assets/ui/logo.png"
 
 [autoload]
 
